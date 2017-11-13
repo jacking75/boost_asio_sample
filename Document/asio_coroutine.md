@@ -1,4 +1,4 @@
-## C++11. Asio와 코루틴
+## Asio와 코루틴
 Boost 라이브러리는 1.53 버전부터 코루틴이 정식으로 포함되었다. Boost 라이브러리 1.54 버전의 Asio에서는 코루틴을 Asio에서도 사용할 수 있게 되었다.
 
 ### stackless 코루틴
@@ -16,7 +16,7 @@ class server : boost::asio::coroutine {
 ```
 - 콜백 함수 오브젝트
 ```
-void operator(...)
+void operator(...)
 ```
 - fork시에 생성자가 호출되지 않으므로 shared_ptr 등을 사용하면 초기화 하기 쉽다
 ```
@@ -40,20 +40,20 @@ void server::operator()(boost::system::error_code ec, std::size_t length)
 - is_parent로 부모를 판정할 수 있다
 - 새로운 컨텍스트는 개별 멤버를 할당된다(그렇지만 생성자는 fork에서 호출되지 않는다)
 ```
-do {    
-  socket_.reset(new tcp::socket(acceptor_->get_io_service()));   
-  yield acceptor_->async_accept(*socket_, *this);    
-  fork server(*this)();
-  } while (is_parent());
+do {    
+  socket_.reset(new tcp::socket(acceptor_->get_io_service()));   
+  yield acceptor_->async_accept(*socket_, *this);    
+  fork server(*this)();
+  } while (is_parent());
 ```
 
 - yield
     - 비동기 처리를 post 하고 CPU 개시한다
     - 비동기 처리 완료 시에 지정한 함수 오브젝트가 콜백된다.
 ```
-yield socket_>async_read_some(boost::asio::buffer(*buffer_), *this);
+yield socket_>async_read_some(boost::asio::buffer(*buffer_), *this);
 
-yield boost::asio::async_write(*socket_, boost::asio::buffer(*buffer_), *this);
+yield boost::asio::async_write(*socket_, boost::asio::buffer(*buffer_), *this);
 ```
 
 - 예
@@ -75,7 +75,7 @@ reenter(this){
        fork server(*this)();
    }while(is_parent());
 
-    yield socket_.async_read_some(asio::buffer(buffer_), *this);    yield socket.async_write_some(asio::buffer(buffer_), *this);    socket_.shutdown(tcp::socket::shutdown_both, ec);};
+    yield socket_.async_read_some(asio::buffer(buffer_), *this);    yield socket.async_write_some(asio::buffer(buffer_), *this);    socket_.shutdown(tcp::socket::shutdown_both, ec);};
 
 ```
 
@@ -112,16 +112,16 @@ coroutine 시의 timeout 처리
 ```
 asio::deadline_timer_;
 timer_.expires_from_now(boost::posix_time::seconds(10));
-timer_.async_wait(        
-  [&socket_](const boost::system::error_code &ec) {            
-    if (ec == boost::asio::error::operation_aborted) {                
-      cout << “cancel” << endl ;            
-      } else {                
-        socket_.cancel();                
-        cout << “timeout” << endl ;            
-      }        
+timer_.async_wait(        
+  [&socket_](const boost::system::error_code &ec) {            
+    if (ec == boost::asio::error::operation_aborted) {                
+      cout << “cancel” << endl ;            
+      } else {                
+        socket_.cancel();                
+        cout << “timeout” << endl ;            
+      }        
     });
 
-socket_.async_read_some(boost::asio::buffer(buffer_), yield[ec]);
-timer_.cancel();
+socket_.async_read_some(boost::asio::buffer(buffer_), yield[ec]);
+timer_.cancel();
 ```

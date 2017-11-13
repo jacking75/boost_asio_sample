@@ -98,19 +98,19 @@ object_handle에는 wait/async_wait()가 있으며 내부에서 WaitForSingleObj
 ### shared_ptr 캡쳐
 
 ```
-class session {    
-	void do_read() {        
-		async_read( socket_,buffer,[this](){this->hoge;});    
+class session {    
+	void do_read() {        
+		async_read( socket_,buffer,[this](){this->hoge;});    
 	}
 }
 ```
 비동기이므로 핸들러 실행 시에 this는 메모리 해제되을수도 있어서 핸들러를 실행하려는 순간에 오브젝트 끝날 수 있다.  
 
 ```
-class session::enable_shared_from_this<session> {    
+class session::enable_shared_from_this<session> {    
 	void do_read() {
 		    auto self(shared_from_this());
-				async_read( socket_,buffer,[this, self](){this->hoge;});    
+				async_read( socket_,buffer,[this, self](){this->hoge;});    
 			}
 }
 ```

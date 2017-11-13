@@ -1,4 +1,3 @@
-
 핸들러의 메모리 확보&해제 비용은 작지만 가급적이면 커스텀 할당기를 만들어 비용을 낮추면 좋다.  
 Boost.Asio 문서에 예제로 있다. [예제](http://www.boost.org/doc/libs/1_63_0/doc/html/boost_asio/example/cpp11/allocation/server.cpp)  
 
