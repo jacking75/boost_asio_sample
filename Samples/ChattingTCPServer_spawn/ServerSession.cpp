@@ -33,8 +33,8 @@ void Session::Send(const int nSize, char* pData)
 	memcpy( pSendData, pData, nSize);
 
 	boost::asio::spawn(m_Socket.get_io_service(),
-        [this,pSendData](boost::asio::yield_context yield)
-        {
+		[this,pSendData](boost::asio::yield_context yield)
+		{
 			PACKET_HEADER* pHeader = (PACKET_HEADER*)pSendData;
 
 			boost::system::error_code ec;
@@ -128,7 +128,7 @@ void Session::Receive()
 
 				m_nPacketBufferMark = nPacketData;
 		  }
-          
+		  
 	});
 
 	m_IsPostReceive = false;
