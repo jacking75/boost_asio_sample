@@ -1,5 +1,8 @@
 #include <SDKDDKVer.h>
+
 #include <deque>
+#include <iostream>
+
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
@@ -12,7 +15,7 @@ class ChatClient
 {
 public:
 	ChatClient(boost::asio::io_service& io_service)
-    : m_IOService(io_service),
+	: m_IOService(io_service),
 	  m_Socket(io_service)
 	{
 		m_bIsLogin = false;
@@ -253,16 +256,16 @@ int main()
 						boost::asio::ip::address::from_string("127.0.0.1"), 
 						PORT_NUMBER);
 
-    ChatClient Cliet( io_service );
+	ChatClient Cliet( io_service );
 	Cliet.Connect( endpoint );
 
-    boost::thread thread( boost::bind(&boost::asio::io_service::run, &io_service) );
+	boost::thread thread( boost::bind(&boost::asio::io_service::run, &io_service) );
 		
 
 	char szInputMessage[MAX_MESSAGE_LEN * 2] = {0,};
-    
+	
 	while( std::cin.getline( szInputMessage, MAX_MESSAGE_LEN) )
-    {
+	{
 		if( strnlen_s( szInputMessage, MAX_MESSAGE_LEN ) == 0 )
 		{
 			break;
@@ -294,9 +297,9 @@ int main()
 
 	io_service.stop();
 
-    Cliet.Close();
+	Cliet.Close();
 	
-    thread.join();
+	thread.join();
   
 	std::cout << "클라이언트를 종료해 주세요" << std::endl;
 

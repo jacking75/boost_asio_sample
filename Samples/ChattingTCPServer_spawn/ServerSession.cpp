@@ -29,7 +29,8 @@ void Session::Init()
 
 void Session::Send(const int nSize, char* pData)
 {
-	auto pSendData = new char[nSize];
+	//auto pSendData = new char[nSize];
+	char pSendData[1024] = { 0, };
 	memcpy( pSendData, pData, nSize);
 
 	boost::asio::spawn(m_Socket.get_io_service(),
@@ -46,7 +47,7 @@ void Session::Send(const int nSize, char* pData)
 			}
 			std::cout << "PostSend Complete!!!" << std::endl;
 
-			delete[] pSendData;
+			//delete[] pSendData;
 			
 	});
 }

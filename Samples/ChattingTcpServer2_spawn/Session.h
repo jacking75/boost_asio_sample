@@ -2,16 +2,13 @@
 
 #include <boost/asio.hpp>
 
+#include "Room.h"
+
 
 using boost::asio::ip::tcp;
 
 
-class chat_participant
-{
-public:
-	virtual ~chat_participant() {}
-	virtual void deliver(const chat_message& msg) = 0;
-};
+
 
 
 class chat_session
