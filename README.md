@@ -1,7 +1,9 @@
 # boost_asio_sample
-1. [ebook]Boost.Asio를 이용한 네트워크 프로그래밍(http://www.hanbit.co.kr/store/books/look.php?p_code=E7889843127) 의 예제 코드.   
-2. 책에는 없는 예제 코드.  
- 
+- [ebook]Boost.Asio를 이용한 네트워크 프로그래밍(http://www.hanbit.co.kr/store/books/look.php?p_code=E7889843127) 의 예제 코드.   
+- 책에는 없는 예제 코드.  
+- (2019.05.01)Samples_VS2019 디렉토리에는 Visual Studio 2019 지원.
+    - [boost/asio deprecated 1.69.0](https://zepeh.tistory.com/498 )을 보고 새로운 API 사용.
+  
   
 ## 문서 
 [Boost.Asio의 원리 원칙](Document/asio_principle.md)     
