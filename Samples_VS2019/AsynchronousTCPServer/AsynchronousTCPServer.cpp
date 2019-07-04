@@ -103,7 +103,7 @@ private:
 	{
 		std::cout << "클라이언트 접속 대기....." << std::endl;
 
-		m_pSession = new Session(m_acceptor.get_io_service());
+		m_pSession = new Session((boost::asio::io_context&)m_acceptor.get_executor().context());
 		
 		m_acceptor.async_accept( m_pSession->Socket(),
 								 boost::bind(&TCP_Server::handle_accept, 

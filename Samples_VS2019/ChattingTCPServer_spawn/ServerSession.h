@@ -35,6 +35,7 @@ private:
 
 	int m_nSessionID;
 	boost::asio::ip::tcp::socket m_Socket;
+	boost::asio::io_context& m_io_service;
 	
 	std::array<char, MAX_RECEIVE_BUFFER_LEN> m_ReceiveBuffer;
 

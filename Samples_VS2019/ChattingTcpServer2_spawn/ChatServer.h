@@ -16,7 +16,7 @@
 
 
 
-const unsigned short SERVER_PORT = 32452;
+const unsigned short SERVER_PORT = 31452;
 
 
 
@@ -26,6 +26,8 @@ public:
 	chat_server(boost::asio::io_context& io_context,
 		const tcp::endpoint& endpoint)
 		: acceptor_(io_context, endpoint)
+		, m_io_context(io_context)
+		, m_NewSocket(io_context)
 	{
 		do_accept();
 	}
@@ -33,23 +35,28 @@ public:
 private:
 	void do_accept()
 	{
-		tcp::socket socket(acceptor_.get_io_service());
-
-		acceptor_.async_accept(socket, 
-			[&socket, this](std::error_code ec)
-		{
-			if (!ec)
+		acceptor_.async_accept(m_NewSocket,
+			[this](std::error_code ec)
 			{
-				std::make_shared<chat_session>(std::move(socket), room_)->start();
-			}
+				if (!ec)
+				{
+					std::cout << "New Connected" << std::endl;
+					std::make_shared<chat_session>(std::move(m_NewSocket), room_)->start();
+				}
+				else
+				{
+					std::cout << ec.message() << std::endl;
+				}
 
-			do_accept();
-			
-		});
+				do_accept();
+
+			});
 	}
 
 
 	tcp::acceptor acceptor_;
+	boost::asio::io_context& m_io_context;
+	tcp::socket m_NewSocket;
 	
 	chat_room room_;
 };

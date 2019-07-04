@@ -39,7 +39,7 @@ public:
 	{
 		for( int i = 0; i < nMaxSessionCount; ++i )
 		{
-			Session* pSession = new Session( i, m_acceptor.get_io_service(), this );
+			Session* pSession = new Session( i, (boost::asio::io_context&)m_acceptor.get_executor().context(), this );
 			m_SessionList.push_back( pSession );
 			m_SessionQueue.push_back( i );
 		}

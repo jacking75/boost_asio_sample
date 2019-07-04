@@ -6,6 +6,7 @@
 
 Session::Session(int nSessionID, boost::asio::io_context& io_service, ChatServer* pServer)
 		: m_Socket(io_service)
+		, m_io_service(io_service)
 		, m_nSessionID( nSessionID )
 		, m_pServer( pServer )
 {
@@ -33,7 +34,7 @@ void Session::Send(const int nSize, char* pData)
 	char pSendData[1024] = { 0, };
 	memcpy( pSendData, pData, nSize);
 
-	boost::asio::spawn(m_Socket.get_io_service(),
+	boost::asio::spawn(m_io_service,
 		[this,pSendData](boost::asio::yield_context yield)
 		{
 			PACKET_HEADER* pHeader = (PACKET_HEADER*)pSendData;
@@ -63,7 +64,7 @@ void Session::Receive()
 		m_IsPostReceive = true;
 	}
 
-	boost::asio::spawn(m_Socket.get_io_service(),
+	boost::asio::spawn(m_io_service,
 			[this](boost::asio::yield_context yield)
 		{
 			if (m_Socket.is_open() == false)

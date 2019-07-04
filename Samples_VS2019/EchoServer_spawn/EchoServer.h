@@ -19,10 +19,10 @@ using boost::asio::ip::tcp;
 class session : public std::enable_shared_from_this<session>
 {
 public:
-	explicit session(tcp::socket socket)
+	explicit session(tcp::socket socket, boost::asio::io_context& io_service)
 		: socket_(std::move(socket)),
-		timer_(socket_.get_io_service()),
-		strand_(socket_.get_io_service())
+		timer_(io_service),
+		strand_(io_service)
 	{
 	}
 
